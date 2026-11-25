@@ -20,6 +20,8 @@ class Hotel(models.Model):
     description = models.TextField("Description")
     email = models.EmailField()
     link = models.URLField(blank=True)
+    min_price = models.DecimalField("Minimal price of staying per day(is soms)", max_digits=8, decimal_places=2)
+    working_hours = models.SlugField("Working hours")
 
     class Meta:
         verbose_name = "Hotel"
@@ -43,3 +45,18 @@ class Address(models.Model):
     def __str__(self):
         return self.address
 
+class Phone(models.Model):
+    LABELS = [
+        ("reception", "Reception"),
+        ("reservation", "Reservation"),
+    ]
+    hotel = models.ForeignKey(
+        Hotel,
+        on_delete=models.CASCADE,
+        related_name="phones"
+    )
+    label = models.CharField(max_length=30, choices=LABELS)
+    phone_number = models.CharField(max_length=30)
+
+    def __str__(self):
+        return self.phone_number
